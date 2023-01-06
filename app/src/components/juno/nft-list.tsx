@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useConnector as useKeplrConnector } from "~/src/provider/keplr";
 import { products } from "~/src/data/juno-products";
 import { ProductItem } from "~/src/components/juno/product-item";
+import { GlobeAltIcon } from "@heroicons/react/24/outline";
 
 export function JunoNftCollection(): JSX.Element {
   const { state } = useKeplrConnector();
@@ -32,7 +33,10 @@ export function JunoNftCollection(): JSX.Element {
 
   return (
     <>
-      <h2>Juno NFT Collection</h2>
+      <div className="font-inter font-bold text-neutral-100 text-lg uppercase flex flex-wrap items-center pb-2 border-b border-neutral-500">
+        <GlobeAltIcon className="w-10 text-neutral-100 p-2 rounded-full" />
+        <span className="ml-2">Your assets</span>
+      </div>
       {products.map(
         (p) =>
           p.isReady && (
