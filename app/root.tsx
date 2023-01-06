@@ -19,7 +19,7 @@ export const meta: MetaFunction = () => ({
 });
 
 export function links() {
-  return [{ rel: "stylesheep", href: styles }];
+  return [{ rel: "stylesheet", href: styles }];
 }
 
 export async function loader() {
@@ -35,7 +35,7 @@ export async function loader() {
 export default function App() {
   const data = useLoaderData<typeof loader>();
   return (
-    <html lang="fr">
+    <html lang="fr" className="bg-neutral-800 text-white">
       <head>
         <Meta />
         <Links />

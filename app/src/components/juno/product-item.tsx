@@ -14,13 +14,20 @@ export function ProductItem({
 }: ProductItemProps): JSX.Element {
   const hasTokens = undefined === tokens || 0 === tokens.length;
   return (
-    <div className={cx({ "text-gray-700": hasTokens })}>
-      {product.name} [{tokens && tokens.join(", ")}]
-      <ProductButton
-        tokens={tokens}
-        projectAddress={product.nftContractAddress}
-        starknetProjectAddress={product.starknetProjectAddress}
-      />
-    </div>
+    <>
+      <div className="font-inter font-bold text-neutral-300 uppercase mt-6">
+        {product.name}
+      </div>
+      <div className={cx({ "text-neutral-500": hasTokens })}>
+        <span>{tokens ? `${tokens.length}` : "0"} NFTs to brigde</span>
+      </div>
+      <div className="mt-4">
+        <ProductButton
+          tokens={tokens}
+          projectAddress={product.nftContractAddress}
+          starknetProjectAddress={product.starknetProjectAddress}
+        />
+      </div>
+    </>
   );
 }

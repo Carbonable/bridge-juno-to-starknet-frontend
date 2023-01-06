@@ -11,6 +11,7 @@ import {
 } from "../provider/keplr";
 import { WalletButton } from "../components/starknet/wallet-button";
 import { displayAddress } from "../utils";
+import { WalletIcon } from "@heroicons/react/24/outline";
 
 export type WalletConnectionProps = {
   junoWalletConnection: string | null;
@@ -35,23 +36,34 @@ function WalletButtonConnectors(): JSX.Element {
   }, [refresh]);
 
   return (
-    <div>
-      <div>Connect to your wallets before continuing</div>
-      <div>
-        <div>
-          {undefined !== keplrState &&
-          keplrState.state === KeplrWalletAvailableStates.Connected ? (
-            <span>{displayAddress(keplrState.account.address)}</span>
-          ) : (
-            <button onClick={keplrConnect}>Connect to Keplr</button>
-          )}
-        </div>
-        <div>
-          Connect to starknet
-          {available.map((c) => (
-            <WalletButton key={c.id()} connector={c} />
-          ))}
-        </div>
+    <div className="mt-12">
+      <div className="font-inter font-bold text-neutral-100 text-lg uppercase flex flex-wrap items-center pb-2 border-b border-neutral-500">
+        <WalletIcon className="w-10 text-neutral-100 p-2 rounded-full" />
+        <span className="ml-2">Connect your wallets</span>
+      </div>
+      <div className="font-inter font-bold text-neutral-300 uppercase mt-6">
+        Juno
+      </div>
+      <div className="mt-2">
+        {undefined !== keplrState &&
+        keplrState.state === KeplrWalletAvailableStates.Connected ? (
+          <span>{displayAddress(keplrState.account.address)}</span>
+        ) : (
+          <button
+            className="font-inter uppercase rounded-full px-4 py-2 text-sm text-neutal-500 border border-neutral-500 tracking-wide hover:bg-opacityLight-5 md:px-6 md:py-3"
+            onClick={keplrConnect}
+          >
+            Connect to Keplr
+          </button>
+        )}
+      </div>
+      <div className="font-inter font-bold text-neutral-300 uppercase mt-6">
+        Starknet
+      </div>
+      <div className="mt-2">
+        {available.map((c) => (
+          <WalletButton key={c.id()} connector={c} />
+        ))}
       </div>
     </div>
   );
@@ -78,7 +90,7 @@ export function WithConnectedWallets(Wrapped: ComponentType<string>) {
   }
 
   WithConnectedWallets.displayName = `WithConnectedWallets(${
-    Wrapped.displayName || Wrapped.name || "Comonent"
+    Wrapped.displayName || Wrapped.name || "Component"
   })`;
 
   return WithConnectedWallets;

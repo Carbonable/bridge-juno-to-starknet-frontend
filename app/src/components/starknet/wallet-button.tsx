@@ -21,13 +21,24 @@ export function WalletButton({ connector }: WalletButtonProps) {
 
   if ("disconnected" === status || undefined === address) {
     return (
-      <button onClick={() => connect(connector)}>With {connector.id()}</button>
+      <button
+        className="font-inter uppercase rounded-full px-4 py-2 text-sm text-neutal-500 border border-neutral-500 tracking-wide hover:bg-opacityLight-5 md:px-6 md:py-3 mr-4"
+        onClick={() => connect(connector)}
+      >
+        {connector.id()}
+      </button>
     );
   }
 
   return (
-    <button onClick={() => disconnect()}>
-      {displayedAddress} {connector.id()}
-    </button>
+    <div className="flex items-center">
+      {connector.name()}: {displayedAddress}
+      <button
+        className="font-inter uppercase rounded-full px-4 py-2 text-sm text-neutal-500 border border-neutral-500 tracking-wide hover:bg-opacityLight-5 md:px-6 md:py-3 ml-4"
+        onClick={() => disconnect()}
+      >
+        Disconnect
+      </button>
+    </div>
   );
 }
