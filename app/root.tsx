@@ -11,6 +11,8 @@ import {
   useLoaderData,
 } from "@remix-run/react";
 import { json } from "@remix-run/node";
+import { ApplicationStateProvider } from "~/src/hook/useApplicationState";
+import { ApplicationState } from "~/src/components/application-state";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -41,15 +43,19 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.ENV = ${JSON.stringify(data.ENV)}`,
-          }}
-        />
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
+        <ApplicationStateProvider>
+          <Outlet />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.ENV = ${JSON.stringify(data.ENV)}`,
+            }}
+          />
+          <Scripts />
+          <ScrollRestoration />
+          <ApplicationState />
+          <LiveReload />
+        </ApplicationStateProvider>
+        <div id="app-messages"></div>
       </body>
     </html>
   );
