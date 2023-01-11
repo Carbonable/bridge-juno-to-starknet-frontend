@@ -1,5 +1,6 @@
 import React from "react";
 import cx from "classnames";
+import { Button } from "~/src/components/button";
 import { useMigrateTokens } from "~/src/hook/useMigrateTokens";
 
 type ProductButtonProps = {
@@ -18,26 +19,15 @@ export function ProductButton({
     projectAddress,
     starknetProjectAddress,
   });
+  const hasTokens = undefined !== tokens && 0 < tokens.length;
   return (
     <div>
-      <button
-        className={cx(
-          "font-inter uppercase rounded-full px-4 py-2 text-sm text-neutal-500 border border-neutral-500 tracking-wide hover:bg-opacityLight-5 md:px-6 md:py-3 mr-4",
-          { disabled: hasBurn }
-        )}
-        onClick={handleBurnTokens}
-      >
+      <Button onClick={handleBurnTokens} canHover={hasTokens}>
         Burn
-      </button>
-      <button
-        className={cx(
-          "font-inter uppercase rounded-full px-4 py-2 text-sm text-neutal-500 border border-neutral-500 tracking-wide hover:bg-opacityLight-5 md:px-6 md:py-3",
-          { disabled: !hasBurn }
-        )}
-        onClick={handleMigrateTokens}
-      >
+      </Button>
+      <Button onClick={handleMigrateTokens} canHover={hasTokens}>
         Migrate
-      </button>
+      </Button>
     </div>
   );
 }
