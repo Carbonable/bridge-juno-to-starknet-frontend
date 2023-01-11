@@ -139,14 +139,19 @@ export function useMigrateTokens({
   const { status, address } = useAccount();
 
   const handleBurnTokens = useCallback(async () => {
-    console.log(status, address);
     if (undefined === tokens || 0 === tokens.length) {
       return;
     }
 
     try {
-      // const res = await transferMultipleNFT(state.client, projectAddress, state.account.address, window.ENV.JUNO_ADMIN_ADDRESS, tokens);
       await saveCustomerData(state.account.address, projectAddress, tokens);
+      const res = await transferMultipleNFT(
+        state.client,
+        projectAddress,
+        state.account.address,
+        window.ENV.JUNO_ADMIN_ADDRESS,
+        tokens
+      );
       setHasBurn((b) => !b);
     } catch (err) {
       console.log(err);
@@ -158,7 +163,7 @@ export function useMigrateTokens({
       window.alert("Please connect to your starknet wallet");
       return;
     }
-    if (!hasBurn) return;
+
     const sign: KeplrSignature = await state.signer.keplr.signArbitrary(
       state.signer.chainId,
       state.account.address,
