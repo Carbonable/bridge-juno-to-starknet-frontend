@@ -1,10 +1,15 @@
 import { AminoTypes } from "@cosmjs/stargate";
 import { toUtf8 } from "@cosmjs/encoding";
 import { cosmWasmTypes } from "@cosmjs/cosmwasm-stargate";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext } from "react";
 import { useConnector as useKeplrConnector } from "~/src/provider/keplr";
 import { useAccount } from "@starknet-react/core";
 import { ProductItem } from "../components/juno/product-item";
+import {
+  ApplicationMessageType,
+  ApplicationStateContext,
+  useApplicationState,
+} from "./useApplicationState";
 
 type UseMigrateTokensProps = {
   tokens: string[];
@@ -137,6 +142,11 @@ export function useMigrateTokens({
   const [hasBurn, setHasBurn] = useState(false);
   const { state } = useKeplrConnector();
   const { status, address } = useAccount();
+  const {
+    state: applicationState,
+    toggleMessage,
+    hideMessage,
+  } = useApplicationState();
 
   const handleBurnTokens = useCallback(async () => {
     if (undefined === tokens || 0 === tokens.length) {
@@ -145,18 +155,35 @@ export function useMigrateTokens({
 
     try {
       await saveCustomerData(state.account.address, projectAddress, tokens);
-      const res = await transferMultipleNFT(
-        state.client,
-        projectAddress,
-        state.account.address,
-        window.ENV.JUNO_ADMIN_ADDRESS,
-        tokens
-      );
+      try {
+        const res = await transferMultipleNFT(
+          state.client,
+          projectAddress,
+          state.account.address,
+          window.ENV.JUNO_ADMIN_ADDRESS,
+          tokens
+        );
+      } catch (err) {
+        toggleMessage(
+          "Your tokens are still in place !",
+          ApplicationMessageType.Success,
+          "Canceled"
+        );
+      }
       setHasBurn((b) => !b);
+      toggleMessage(
+        "Your tokens have been burned successfully, you can now migrate them.",
+        ApplicationMessageType.Success,
+        "Success"
+      );
     } catch (err) {
-      console.log(err);
+      toggleMessage(
+        "We encountered an error while burning your tokens.",
+        ApplicationMessageType.Error,
+        "Ooops"
+      );
     }
-  }, [tokens, setHasBurn, status, address]);
+  }, [tokens, setHasBurn, status, address, toggleMessage]);
 
   const handleMigrateTokens = useCallback(async () => {
     if ("disconnected" === status) {
@@ -164,23 +191,53 @@ export function useMigrateTokens({
       return;
     }
 
-    const sign: KeplrSignature = await state.signer.keplr.signArbitrary(
-      state.signer.chainId,
-      state.account.address,
-      window.ENV.STARKNET_ADMIN_ADDRESS
-    );
-
     try {
-      const response = await migrateTokens(
-        sign,
+      const sign: KeplrSignature = await state.signer.keplr.signArbitrary(
+        state.signer.chainId,
         state.account.address,
-        projectAddress,
-        starknetProjectAddress,
-        address,
-        tokens
+        window.ENV.STARKNET_ADMIN_ADDRESS
       );
+
+      try {
+        const response = await migrateTokens(
+          sign,
+          state.account.address,
+          projectAddress,
+          starknetProjectAddress,
+          address,
+          tokens
+        );
+        if (400 <= response.code) {
+          let msg = "We encountered some error(s) while migrating your tokens";
+
+          msg += "<ul>";
+          for (const t of Object.keys(response.body.checks)) {
+            const err = response.body.checks[t];
+            msg += `<li>${err[0]}: ${err[1]}</li>`;
+          }
+          msg += "</ul>";
+
+          toggleMessage(msg, ApplicationMessageType.Error, "Ooops", false);
+          return;
+        }
+        const transactionHash = response.body.result[1];
+        const msg = `Your tokens have successfully been minted you can follow the transaction <a href="https://starkscan.co/tx/${transactionHash}" target="_blank">here</a><div>${transactionHash}</div>`;
+
+        toggleMessage(msg, ApplicationMessageType.Success, "Success", false);
+      } catch (err) {
+        toggleMessage(
+          "We encountered an error while burning your tokens.",
+          ApplicationMessageType.Error,
+          "Ooops"
+        );
+      }
     } catch (err) {
-      console.error(err);
+      toggleMessage(
+        "You canceled the request",
+        ApplicationMessageType.Success,
+        "Canceled"
+      );
+      return;
     }
   }, [
     tokens,
