@@ -30,6 +30,8 @@ export async function loader() {
       JUNO_ADMIN_ADDRESS: process.env.JUNO_ADMIN_ADDRESS,
       STARKNET_ADMIN_ADDRESS: process.env.STARKNET_ADMIN_ADDRESS,
       API_URL: process.env.API_URL,
+      BANEGAS_FARM: process.env.BANEGAS_FARM,
+      LAS_DELICIAS: process.env.LAS_DELICIAS,
     },
   });
 }

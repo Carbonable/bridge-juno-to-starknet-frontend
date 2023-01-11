@@ -171,6 +171,7 @@ export function useMigrateTokens({
         );
       }
       setHasBurn((b) => !b);
+      localStorage.setItem(`hasBurn-${projectAddress}`, "true");
       toggleMessage(
         "Your tokens have been burned successfully, you can now migrate them.",
         ApplicationMessageType.Success,
@@ -221,9 +222,10 @@ export function useMigrateTokens({
           return;
         }
         const transactionHash = response.body.result[1];
-        const msg = `Your tokens have successfully been minted you can follow the transaction <a href="https://starkscan.co/tx/${transactionHash}" target="_blank">here</a><div>${transactionHash}</div>`;
+        const msg = `Your tokens have successfully been minted you can follow the transaction <a class="text-green" href="https://starkscan.co/tx/${transactionHash}" target="_blank">${transactionHash}</a>`;
 
         toggleMessage(msg, ApplicationMessageType.Success, "Success", false);
+        localStorage.removeItem(`hasBurn-${projectAddress}`);
       } catch (err) {
         toggleMessage(
           "We encountered an error while burning your tokens.",

@@ -55,7 +55,7 @@ export const products: Product[] = [
     nftContractAddress:
       "juno12uzam70vndkakuupksvsasrxwsehz8n8j5s8sw2y0vv5d94dxh0qwmddq4",
     starknetProjectAddress:
-      "0x013fac4bbc2a72628c21356228132ac536bd3a5abe75038fd844352322349749",
+      typeof window === "undefined" ? "" : window.ENV.BANEGAS_FARM,
     unitPrice: 9800000,
     denom: "ujuno",
     max: 5,
@@ -88,7 +88,7 @@ export const products: Product[] = [
     nftContractAddress:
       "juno13g5r0tmmngmm9d0clwa7exjamxxxag5p5fgdra7qjtaexdg6yprq5298fn",
     starknetProjectAddress:
-      "0x0403c9a5de398256e7e23cc60387b76ba7e7ccf27375e607bec9a4b40b9154d0",
+      typeof window === "undefined" ? "" : window.ENV.LAS_DELICIAS,
     unitPrice: 12900000,
     denom: "ujuno",
     max: 5,
