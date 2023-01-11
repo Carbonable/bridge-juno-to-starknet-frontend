@@ -33,3 +33,8 @@
   font-style: normal;
   font-display: swap;
 }
+
+.text-green {
+  --tw-text-opacity: 1;
+  color: rgb(10 242 173);
+}
