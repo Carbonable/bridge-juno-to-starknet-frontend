@@ -69,6 +69,7 @@ type KeplrWalletActions = SetAccount | SetSigner | SetClient | SetState;
 type KeplrContextValue = {
   chainConfig: JunoChainConfig;
   state: ConnectedKeplrWallet;
+  connect: () => void;
 };
 
 const KEPLR_INITIAL_STATE: KeplrContextValue = {
@@ -78,6 +79,7 @@ const KEPLR_INITIAL_STATE: KeplrContextValue = {
     signer: undefined,
     client: undefined,
   },
+  connect: null,
 };
 
 export const KeplrContext =
@@ -142,8 +144,7 @@ function useKeplrManager(chainConfig: JunoChainConfig): KeplrManagerState {
 }
 
 export function useConnector() {
-  const { chainConfig } = useContext(KeplrContext);
-  const { state, connect } = useKeplrManager(chainConfig);
+  const { state, chainConfig, connect } = useContext(KeplrContext);
 
   useEffect(() => {
     const hasKeplrConnected = window.localStorage.getItem(
@@ -161,9 +162,9 @@ export function KeplrProvider({
   chainConfig,
   children,
 }: React.PropsWithChildren<{ chainConfig: JunoChainConfig }>) {
-  const { state } = useKeplrManager(chainConfig);
+  const { state, connect } = useKeplrManager(chainConfig);
   return (
-    <KeplrContext.Provider value={{ chainConfig, state }}>
+    <KeplrContext.Provider value={{ chainConfig, state, connect }}>
       {children}
     </KeplrContext.Provider>
   );
