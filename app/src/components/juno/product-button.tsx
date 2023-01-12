@@ -14,7 +14,11 @@ export function ProductButton({
   projectAddress,
   starknetProjectAddress,
 }: ProductButtonProps) {
-  const { handleBurnTokens, handleMigrateTokens } = useMigrateTokens({
+  const {
+    handleBurnTokens,
+    handleMigrateTokens,
+    hasBurn: canMint,
+  } = useMigrateTokens({
     tokens,
     projectAddress,
     starknetProjectAddress,
@@ -30,7 +34,10 @@ export function ProductButton({
       <Button onClick={handleBurnTokens} canHover={hasTokens}>
         Burn
       </Button>
-      <Button onClick={handleMigrateTokens} canHover={hasBurn && hasTokens}>
+      <Button
+        onClick={handleMigrateTokens}
+        canHover={hasBurn || hasTokens || canMint}
+      >
         Migrate
       </Button>
     </div>

@@ -16,17 +16,19 @@ export function JunoNftCollection(): JSX.Element {
       0 === Object.keys(availableTokens).length
     ) {
       for (const product of products) {
-        state.client
-          .queryContractSmart(product.nftContractAddress, {
-            tokens: { owner: state.account.address, limit: 100 },
-          })
-          .then(({ tokens }) => {
-            setAvailableTokens((at) => ({
-              ...at,
-              [product.nftContractAddress]: tokens,
-            }));
-          })
-          .catch(console.error);
+        if (product.isReady) {
+          state.client
+            .queryContractSmart(product.nftContractAddress, {
+              tokens: { owner: state.account.address, limit: 100 },
+            })
+            .then(({ tokens }) => {
+              setAvailableTokens((at) => ({
+                ...at,
+                [product.nftContractAddress]: tokens,
+              }));
+            })
+            .catch(console.error);
+        }
       }
     }
   }, [state, setAvailableTokens]);

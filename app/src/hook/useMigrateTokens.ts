@@ -228,7 +228,7 @@ export function useMigrateTokens({
         localStorage.removeItem(`hasBurn-${projectAddress}`);
       } catch (err) {
         toggleMessage(
-          "We encountered an error while burning your tokens.",
+          "We encountered an error while minting your tokens.",
           ApplicationMessageType.Error,
           "Ooops"
         );
