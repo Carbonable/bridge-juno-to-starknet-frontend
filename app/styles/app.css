@@ -523,10 +523,6 @@ video {
   position: fixed;
 }
 
-.absolute {
-  position: absolute;
-}
-
 .inset-0 {
   top: 0px;
   right: 0px;
@@ -589,24 +585,16 @@ video {
   margin-top: 1rem;
 }
 
+.mb-12 {
+  margin-bottom: 3rem;
+}
+
 .mb-4 {
   margin-bottom: 1rem;
 }
 
 .ml-4 {
   margin-left: 1rem;
-}
-
-.mb-6 {
-  margin-bottom: 1.5rem;
-}
-
-.mb-10 {
-  margin-bottom: 2.5rem;
-}
-
-.mb-12 {
-  margin-bottom: 3rem;
 }
 
 .inline-block {
@@ -645,8 +633,8 @@ video {
   width: 2.5rem;
 }
 
-.w-1\/2 {
-  width: 50%;
+.w-11\/12 {
+  width: 91.666667%;
 }
 
 .w-5 {
@@ -657,28 +645,12 @@ video {
   width: 25%;
 }
 
-.w-11\/12 {
-  width: 91.666667%;
-}
-
 .w-9\/12 {
   width: 75%;
 }
 
-.w-6 {
-  width: 1.5rem;
-}
-
 .w-4 {
   width: 1rem;
-}
-
-.w-2 {
-  width: 0.5rem;
-}
-
-.w-1 {
-  width: 0.25rem;
 }
 
 @keyframes spin {
@@ -697,6 +669,10 @@ video {
 
 .flex-wrap {
   flex-wrap: wrap;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
 }
 
 .items-start {
@@ -799,10 +775,6 @@ video {
   padding: 0.5rem;
 }
 
-.p-1 {
-  padding: 0.25rem;
-}
-
 .px-4 {
   padding-left: 1rem;
   padding-right: 1rem;
@@ -823,19 +795,14 @@ video {
   padding-bottom: 1rem;
 }
 
-.px-2 {
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-}
-
 .py-1 {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
 }
 
-.px-1 {
-  padding-left: 0.25rem;
-  padding-right: 0.25rem;
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 .pb-2 {
@@ -931,6 +898,10 @@ video {
   color: rgb(168 171 179 / var(--tw-text-opacity));
 }
 
+.underline {
+  text-decoration-line: underline;
+}
+
 .opacity-25 {
   opacity: 0.25;
 }
@@ -1011,15 +982,11 @@ video {
   background-color: rgba(208, 209, 214, 0.05);
 }
 
+.hover\:no-underline:hover {
+  text-decoration-line: none;
+}
+
 @media (min-width: 768px) {
-  .md\:\!h-3 {
-    height: 0.75rem !important;
-  }
-
-  .md\:\!h-4 {
-    height: 1rem !important;
-  }
-
   .md\:\!h-6 {
     height: 1.5rem !important;
   }
@@ -1028,40 +995,12 @@ video {
     width: 2.5rem;
   }
 
-  .md\:w-4 {
-    width: 1rem;
-  }
-
-  .md\:\!w-2 {
-    width: 0.5rem !important;
-  }
-
-  .md\:\!w-3 {
-    width: 0.75rem !important;
-  }
-
-  .md\:\!w-4 {
-    width: 1rem !important;
-  }
-
-  .md\:\!w-6 {
-    width: 1.5rem !important;
-  }
-
   .md\:w-10\/12 {
     width: 83.333333%;
   }
 
-  .md\:p-1 {
-    padding: 0.25rem;
-  }
-
-  .md\:\!p-1 {
-    padding: 0.25rem !important;
-  }
-
-  .md\:\!p-2 {
-    padding: 0.5rem !important;
+  .md\:\!w-6 {
+    width: 1.5rem !important;
   }
 
   .md\:\!p-4 {

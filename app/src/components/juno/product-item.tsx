@@ -5,6 +5,7 @@ import { ProductButton } from "./product-button";
 import { useFetcher } from "@remix-run/react";
 import { useConnector as useKeplrConnector } from "~/src/provider/keplr";
 import Status from "./status";
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 
 type ProductItemProps = {
   product: Product;
@@ -82,8 +83,17 @@ export function ProductItem({
         <div className={cx({ "text-neutral-300": !hasTokens })}>
           {(hasTokens || fetcher.data?.length === 0) &&
             tokens?.map((token) => (
-              <div key={token} className="mb-4">
+              <div key={token} className="mb-4 flex items-center flex-nowrap">
                 Token {token}: <Status>to bridge</Status>
+                <a
+                  href={`https://starkscan.co/tx/`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-neutral-300 underline hover:no-underline ml-4 flex flex-nowrap"
+                >
+                  View on starkscan{" "}
+                  <ArrowTopRightOnSquareIcon className="w-4 ml-2" />
+                </a>
               </div>
             ))}
           {!hasTokens &&
@@ -91,6 +101,18 @@ export function ProductItem({
             fetcher.data.map((item: any) => (
               <div key={item.token_id} className="mb-4 text-neutral-300">
                 Token {item.token_id}: <Status>{item.status}</Status>
+                {(item.status === "success" ||
+                  item.status === "processing") && (
+                  <a
+                    href={`https://starkscan.co/tx/${item.transaction_hash}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-neutral-300 underline hover:no-underline ml-4 flex flex-nowrap"
+                  >
+                    View on starkscan{" "}
+                    <ArrowTopRightOnSquareIcon className="w-4 ml-2" />
+                  </a>
+                )}
               </div>
             ))}
         </div>
