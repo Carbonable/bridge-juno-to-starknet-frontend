@@ -4,7 +4,6 @@ import { cosmWasmTypes } from "@cosmjs/cosmwasm-stargate";
 import { useState, useCallback, useContext } from "react";
 import { useConnector as useKeplrConnector } from "~/src/provider/keplr";
 import { useAccount } from "@starknet-react/core";
-import { ProductItem } from "../components/juno/product-item";
 import {
   ApplicationMessageType,
   ApplicationStateContext,
@@ -19,7 +18,7 @@ type UseMigrateTokensProps = {
 
 type UseMigrateTokensProperties = {
   handleBurnTokens: () => void;
-  handleMigrateTokens: () => void;
+  handleMigrateTokens: (onFinishCallback: () => void | null) => void;
   hasBurn: boolean;
 };
 
@@ -169,86 +168,92 @@ export function useMigrateTokens({
           ApplicationMessageType.Success,
           "Canceled"
         );
+        return;
       }
       setHasBurn((b) => !b);
       localStorage.setItem(`hasBurn-${projectAddress}`, "true");
       toggleMessage(
-        "Your tokens have been burned successfully, you can now migrate them.",
+        "Your tokens have been sequestrated successfully, you can now migrate them.",
         ApplicationMessageType.Success,
         "Success"
       );
     } catch (err) {
       toggleMessage(
-        "We encountered an error while burning your tokens.",
+        "We encountered an error while sequestrating your tokens.",
         ApplicationMessageType.Error,
         "Ooops"
       );
     }
   }, [tokens, setHasBurn, status, address, toggleMessage]);
 
-  const handleMigrateTokens = useCallback(async () => {
-    if ("disconnected" === status) {
-      window.alert("Please connect to your starknet wallet");
-      return;
-    }
-
-    try {
-      const sign: KeplrSignature = await state.signer.keplr.signArbitrary(
-        state.signer.chainId,
-        state.account.address,
-        window.ENV.STARKNET_ADMIN_ADDRESS
-      );
+  const handleMigrateTokens = useCallback(
+    async (onFinishCallback) => {
+      if ("disconnected" === status) {
+        window.alert("Please connect to your starknet wallet");
+        return;
+      }
 
       try {
-        const response = await migrateTokens(
-          sign,
+        const sign: KeplrSignature = await state.signer.keplr.signArbitrary(
+          state.signer.chainId,
           state.account.address,
-          projectAddress,
-          starknetProjectAddress,
-          address,
-          tokens
+          window.ENV.STARKNET_ADMIN_ADDRESS
         );
-        if (400 <= response.code) {
-          let msg = "We encountered some error(s) while migrating your tokens";
 
-          msg += "<ul>";
-          for (const t of Object.keys(response.body.checks)) {
-            const err = response.body.checks[t];
-            msg += `<li>${err[0]}: ${err[1]}</li>`;
+        try {
+          const response = await migrateTokens(
+            sign,
+            state.account.address,
+            projectAddress,
+            starknetProjectAddress,
+            address,
+            tokens
+          );
+          if (400 <= response.code) {
+            let msg =
+              "We encountered some error(s) while migrating your tokens";
+
+            msg += "<ul>";
+            for (const t of Object.keys(response.body.checks)) {
+              const err = response.body.checks[t];
+              msg += `<li>${err[0]}: ${err[1]}</li>`;
+            }
+            msg += "</ul>";
+
+            toggleMessage(msg, ApplicationMessageType.Error, "Ooops", false);
+            return;
           }
-          msg += "</ul>";
+          const transactionHash = response.body.result[1];
+          const msg = `Your tokens have successfully been minted you can follow the transaction <a class="text-green" href="https://starkscan.co/tx/${transactionHash}" target="_blank">${transactionHash}</a>`;
 
-          toggleMessage(msg, ApplicationMessageType.Error, "Ooops", false);
-          return;
+          if (
+            undefined !== onFinishCallback &&
+            null !== onFinishCallback &&
+            "function" === typeof onFinishCallback
+          ) {
+            onFinishCallback();
+          }
+
+          toggleMessage(msg, ApplicationMessageType.Success, "Success", false);
+          localStorage.removeItem(`hasBurn-${projectAddress}`);
+        } catch (err) {
+          toggleMessage(
+            "We encountered an error while minting your tokens.",
+            ApplicationMessageType.Error,
+            "Ooops"
+          );
         }
-        const transactionHash = response.body.result[1];
-        const msg = `Your tokens have successfully been minted you can follow the transaction <a class="text-green" href="https://starkscan.co/tx/${transactionHash}" target="_blank">${transactionHash}</a>`;
-
-        toggleMessage(msg, ApplicationMessageType.Success, "Success", false);
-        localStorage.removeItem(`hasBurn-${projectAddress}`);
       } catch (err) {
         toggleMessage(
-          "We encountered an error while minting your tokens.",
-          ApplicationMessageType.Error,
-          "Ooops"
+          "You canceled the request",
+          ApplicationMessageType.Success,
+          "Canceled"
         );
+        return;
       }
-    } catch (err) {
-      toggleMessage(
-        "You canceled the request",
-        ApplicationMessageType.Success,
-        "Canceled"
-      );
-      return;
-    }
-  }, [
-    tokens,
-    projectAddress,
-    starknetProjectAddress,
-    hasBurn,
-    status,
-    address,
-  ]);
+    },
+    [tokens, projectAddress, starknetProjectAddress, hasBurn, status, address]
+  );
 
   return { handleBurnTokens, handleMigrateTokens, hasBurn };
 }

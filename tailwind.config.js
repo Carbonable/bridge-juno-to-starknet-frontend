@@ -40,11 +40,10 @@ module.exports = {
         lightblue: "#AAC6FD",
         grey: "#787675",
         footerBg: "#272727",
+        orange: "#EBA546",
+        red: "#C25265",
       },
       backgroundImage: {
-        primary:
-          "linear-gradient(180deg, #0AF7B1 0%, #09AD7C 44.27%, #087051 100%)",
-        blue: "linear-gradient(180deg, #A1BCF0 0%, #7B90BA 40.1%, #394D73 100%)",
         brand: "linear-gradient(270deg, #A8C4EF 39.58%, #0AF2AD 100%)",
         "light-5": "rgba(208, 209, 214, 0.05)",
         "green-blue": "linear-gradient(270deg, #A8C4EF 39.58%, #0AF2AD 100%);",
@@ -55,21 +54,6 @@ module.exports = {
         launchpad: "url('/assets/images/backgrounds/launchpad.png')",
         header:
           "linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,1) 78%, rgba(0,0,0,0) 100%);",
-      },
-      animation: {
-        "blur-1": "blur-text 1.4s 0.2s infinite linear alternate",
-        "blur-2": "blur-text 1.4s 0.4s infinite linear alternate",
-        "blur-3": "blur-text 1.4s 0.6s infinite linear alternate",
-        "blur-4": "blur-text 1.4s 0.8s infinite linear alternate",
-        "blur-5": "blur-text 1.4s 1s infinite linear alternate",
-        "blur-6": "blur-text 1.4s 1.2s infinite linear alternate",
-        "blur-7": "blur-text 1.4s 1.4s infinite linear alternate",
-      },
-      keyframes: {
-        "blur-text": {
-          "0%": { filter: "blur(0px)" },
-          "100%": { filter: "blur(4px)" },
-        },
       },
     },
   },

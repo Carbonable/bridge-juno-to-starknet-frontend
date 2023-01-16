@@ -3,7 +3,7 @@ import cx from "classnames";
 
 type ButtonProps = {
   canHover: boolean | null;
-  cx: string | null;
+  cx?: string | null;
   onClick: (() => Promise<void>) | (() => void) | null;
 };
 
@@ -59,9 +59,9 @@ export function Button({
   return (
     <button
       className={cx(
-        `font-inter uppercase rounded-full px-4 py-2 text-sm text-neutal-500 border border-neutral-500 tracking-wide md:px-6 md:py-3 mr-4 ${classNames}`,
+        `font-inter uppercase rounded-full px-4 py-2 text-sm text-neutral-100 border border-neutral-500 tracking-wide md:px-6 md:py-3 mr-4 ${classNames}`,
         { "hover:bg-opacityLight-5": buttonState.isClickable },
-        { "cursor-not-allowed": !buttonState.isClickable }
+        { "cursor-not-allowed text-neutral-500": !buttonState.isClickable }
       )}
       onClick={handleClick}
     >
