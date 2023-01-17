@@ -12,6 +12,7 @@ import {
 import { WalletButton } from "../components/starknet/wallet-button";
 import { displayAddress } from "../utils";
 import { WalletIcon } from "@heroicons/react/24/outline";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/solid";
 
 export type WalletConnectionProps = {
   junoWalletConnection: string | null;
@@ -64,6 +65,11 @@ function WalletButtonConnectors(): JSX.Element {
         {available.map((c) => (
           <WalletButton key={c.id()} connector={c} />
         ))}
+      </div>
+      <div className="bg-red rounded-lg px-4 py-2 text-neutral-100 mt-4 w-max">
+        <ExclamationTriangleIcon className="w-8 inline-block mr-2" />
+        Make sure to be connected to a Mainnet wallet. If you are using a
+        Testnet wallet your assets will be <b>lost forever</b>.
       </div>
     </div>
   );

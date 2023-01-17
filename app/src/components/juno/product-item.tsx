@@ -19,6 +19,7 @@ export function ProductItem({
   const { state } = useKeplrConnector();
   const hasTokens = 0 < tokens?.length;
   const fetcher = useFetcher();
+  const [refreshDisplay, setRefreshDisplay] = useState(false);
 
   useEffect(() => {
     function refresh() {
@@ -28,7 +29,7 @@ export function ProductItem({
           0 ||
         fetcher.data?.length === 0;
 
-      if (state && mustRefresh) {
+      if (state && state.account && mustRefresh) {
         fetcher.load(
           `/bridge/status?wallet=${state.account.address}&starknetAdrr=${product.starknetProjectAddress}`
         );
@@ -48,6 +49,7 @@ export function ProductItem({
     fetcher.load(
       `/bridge/status?wallet=${state.account.address}&starknetAdrr=${product.starknetProjectAddress}`
     );
+    setRefreshDisplay(true);
   }, [fetcher, state]);
 
   return (
@@ -85,21 +87,15 @@ export function ProductItem({
             tokens?.map((token) => (
               <div key={token} className="mb-4 flex items-center flex-nowrap">
                 Token {token}: <Status>to bridge</Status>
-                <a
-                  href={`https://starkscan.co/tx/`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-neutral-300 underline hover:no-underline ml-4 flex flex-nowrap"
-                >
-                  View on starkscan{" "}
-                  <ArrowTopRightOnSquareIcon className="w-4 ml-2" />
-                </a>
               </div>
             ))}
           {!hasTokens &&
             fetcher.data?.length > 0 &&
             fetcher.data.map((item: any) => (
-              <div key={item.token_id} className="mb-4 text-neutral-300">
+              <div
+                key={item.token_id}
+                className="mb-4 flex items-center flex-nowrap"
+              >
                 Token {item.token_id}: <Status>{item.status}</Status>
                 {(item.status === "success" ||
                   item.status === "processing") && (

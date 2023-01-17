@@ -170,7 +170,9 @@ export function useMigrateTokens({
         );
         return;
       }
+
       setHasBurn((b) => !b);
+
       localStorage.setItem(`hasBurn-${projectAddress}`, "true");
       toggleMessage(
         "Your tokens have been sequestrated successfully, you can now migrate them.",

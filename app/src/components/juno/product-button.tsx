@@ -38,7 +38,7 @@ export function ProductButton({
       </Button>
       <Button
         onClick={() => handleMigrateTokens(onFinishMigrateCallback)}
-        canHover={hasBurn || hasTokens || canMint}
+        canHover={hasTokens || canMint}
       >
         Migrate
       </Button>
