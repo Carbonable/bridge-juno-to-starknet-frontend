@@ -18,7 +18,8 @@ export function ProductButton({
   const {
     handleBurnTokens,
     handleMigrateTokens,
-    hasBurn: canMint,
+    hasBurn: canMigrate,
+    hasFinishProcess,
   } = useMigrateTokens({
     tokens,
     projectAddress,
@@ -33,12 +34,12 @@ export function ProductButton({
   }, [hasBurn, projectAddress]);
   return (
     <div>
-      <Button onClick={handleBurnTokens} canHover={hasTokens && !canMint}>
+      <Button onClick={handleBurnTokens} canHover={hasTokens && !canMigrate}>
         Sequestrate
       </Button>
       <Button
         onClick={() => handleMigrateTokens(onFinishMigrateCallback)}
-        canHover={hasTokens || canMint}
+        canHover={canMigrate && !hasFinishProcess}
       >
         Migrate
       </Button>

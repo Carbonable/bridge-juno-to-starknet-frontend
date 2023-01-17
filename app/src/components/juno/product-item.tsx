@@ -1,11 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
-import cx from "classnames";
 import { Product } from "~/src/data/juno-products";
 import { ProductButton } from "./product-button";
 import { useFetcher } from "@remix-run/react";
 import { useConnector as useKeplrConnector } from "~/src/provider/keplr";
-import Status from "./status";
-import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
+import TransactionStatus from "./transaction-status";
 
 type ProductItemProps = {
   product: Product;
@@ -17,9 +15,8 @@ export function ProductItem({
   tokens,
 }: ProductItemProps): JSX.Element {
   const { state } = useKeplrConnector();
-  const hasTokens = 0 < tokens?.length;
+  const [hasTokens, setHasTokens] = useState(0 < tokens?.length);
   const fetcher = useFetcher();
-  const [refreshDisplay, setRefreshDisplay] = useState(false);
 
   useEffect(() => {
     function refresh() {
@@ -42,14 +39,18 @@ export function ProductItem({
 
     const interval = setInterval(refresh, 10000);
 
+    if (!hasTokens && tokens?.length > 0) {
+      setHasTokens(true);
+    }
+
     return () => clearInterval(interval);
-  }, [fetcher, state, hasTokens]);
+  }, [fetcher, state, hasTokens, tokens]);
 
   const forceRefresh = useCallback(() => {
     fetcher.load(
       `/bridge/status?wallet=${state.account.address}&starknetAdrr=${product.starknetProjectAddress}`
     );
-    setRefreshDisplay(true);
+    setHasTokens(false);
   }, [fetcher, state]);
 
   return (
@@ -75,44 +76,11 @@ export function ProductItem({
           </div>
         </div>
       </div>
-      <div className="rounded-2xl border border-neutral-700 bg-launchpad-header pt-4 px-4 text-left mt-4 shadow-xl mb-12">
-        <div className="font-inter uppercase font-bold text-neutral-200 text-sm mb-4">
-          Transaction status
-        </div>
-        {!hasTokens && fetcher.data?.length === 0 && (
-          <div className="text-neutral-300 mb-4">No tokens to bridge</div>
-        )}
-        <div className={cx({ "text-neutral-300": !hasTokens })}>
-          {(hasTokens || fetcher.data?.length === 0) &&
-            tokens?.map((token) => (
-              <div key={token} className="mb-4 flex items-center flex-nowrap">
-                Token {token}: <Status>to bridge</Status>
-              </div>
-            ))}
-          {!hasTokens &&
-            fetcher.data?.length > 0 &&
-            fetcher.data.map((item: any) => (
-              <div
-                key={item.token_id}
-                className="mb-4 flex items-center flex-nowrap"
-              >
-                Token {item.token_id}: <Status>{item.status}</Status>
-                {(item.status === "success" ||
-                  item.status === "processing") && (
-                  <a
-                    href={`https://starkscan.co/tx/${item.transaction_hash}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-neutral-300 underline hover:no-underline ml-4 flex flex-nowrap"
-                  >
-                    View on starkscan{" "}
-                    <ArrowTopRightOnSquareIcon className="w-4 ml-2" />
-                  </a>
-                )}
-              </div>
-            ))}
-        </div>
-      </div>
+      <TransactionStatus
+        hasTokens={hasTokens}
+        tokens={tokens}
+        data={fetcher.data}
+      />
     </>
   );
 }

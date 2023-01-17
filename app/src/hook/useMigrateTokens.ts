@@ -20,6 +20,7 @@ type UseMigrateTokensProperties = {
   handleBurnTokens: () => void;
   handleMigrateTokens: (onFinishCallback: () => void | null) => void;
   hasBurn: boolean;
+  hasFinishProcess: boolean;
 };
 
 type KeplrSignature = {
@@ -138,7 +139,8 @@ export function useMigrateTokens({
   projectAddress,
   starknetProjectAddress,
 }: UseMigrateTokensProps): UseMigrateTokensProperties {
-  const [hasBurn, setHasBurn] = useState(false);
+  const [hasBurn, setHasBurn] = useState(tokens?.length > 0);
+  const [hasFinishProcess, setHasFinishProcess] = useState(false);
   const { state } = useKeplrConnector();
   const { status, address } = useAccount();
   const {
@@ -236,6 +238,8 @@ export function useMigrateTokens({
             onFinishCallback();
           }
 
+          setHasFinishProcess(true);
+
           toggleMessage(msg, ApplicationMessageType.Success, "Success", false);
           localStorage.removeItem(`hasBurn-${projectAddress}`);
         } catch (err) {
@@ -254,8 +258,16 @@ export function useMigrateTokens({
         return;
       }
     },
-    [tokens, projectAddress, starknetProjectAddress, hasBurn, status, address]
+    [
+      tokens,
+      projectAddress,
+      starknetProjectAddress,
+      hasBurn,
+      status,
+      address,
+      setHasFinishProcess,
+    ]
   );
 
-  return { handleBurnTokens, handleMigrateTokens, hasBurn };
+  return { handleBurnTokens, handleMigrateTokens, hasBurn, hasFinishProcess };
 }
