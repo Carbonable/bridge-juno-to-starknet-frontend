@@ -66,7 +66,7 @@ function WalletButtonConnectors(): JSX.Element {
           <WalletButton key={c.id()} connector={c} />
         ))}
       </div>
-      <div className="bg-red rounded-lg px-4 py-2 text-neutral-100 mt-4 w-max">
+      <div className="bg-red rounded-lg px-4 py-2 text-neutral-100 mt-4 w-fit">
         <ExclamationTriangleIcon className="w-8 inline-block mr-2" />
         Make sure to be connected to a Mainnet wallet. If you are using a
         Testnet wallet your assets will be <b>lost forever</b>.

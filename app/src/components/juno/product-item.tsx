@@ -4,6 +4,7 @@ import { ProductButton } from "./product-button";
 import { useFetcher } from "@remix-run/react";
 import { useConnector as useKeplrConnector } from "~/src/provider/keplr";
 import TransactionStatus from "./transaction-status";
+import { InformationCircleIcon } from "@heroicons/react/24/solid";
 
 type ProductItemProps = {
   product: Product;
@@ -56,14 +57,14 @@ export function ProductItem({
   return (
     <>
       <div className="flex items-start justify-start flex-wrap mt-12">
-        <div className="w-3/12">
+        <div className="w-full md:w-4/12 xl:w-3/12">
           <img
             src={`https://carbonable.infura-ipfs.io/ipfs/${product.ipfsImage}`}
-            className="w-11/12"
+            className="w-11/12 mx-auto"
           />
         </div>
-        <div className="w-9/12 pl-4 pt-2">
-          <div className="w-full font-inter font-bold text-neutral-300 uppercase mb-2">
+        <div className="w-full md:w-8/12 xl:w-9/12 pl-4 pt-2">
+          <div className="w-full font-inter font-bold text-neutral-300 uppercase mb-2 mt-2">
             {product.name}
           </div>
           <div className="w-full mt-4">
@@ -73,6 +74,11 @@ export function ProductItem({
               starknetProjectAddress={product.starknetProjectAddress}
               onFinishMigrateCallback={forceRefresh}
             />
+          </div>
+          <div className="mt-6 border border-neutral-300 p-4 text-neutral-100 rounded-lg w-fit">
+            <InformationCircleIcon className="w-8 inline-block mr-2" />
+            The migration process can take up to 30 minutes on the StarkNet
+            Alpha Mainnet
           </div>
         </div>
       </div>

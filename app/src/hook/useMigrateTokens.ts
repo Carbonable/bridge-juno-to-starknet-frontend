@@ -228,7 +228,7 @@ export function useMigrateTokens({
             return;
           }
           const transactionHash = response.body.result[1];
-          const msg = `Your tokens have successfully been minted you can follow the transaction <a class="text-green" href="https://starkscan.co/tx/${transactionHash}" target="_blank">${transactionHash}</a>`;
+          const msg = `Your tokens are being migrated, you can follow the progress`;
 
           if (
             undefined !== onFinishCallback &&

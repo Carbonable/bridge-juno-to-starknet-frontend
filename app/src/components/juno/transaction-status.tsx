@@ -48,7 +48,7 @@ export default function TransactionStatus({
   data,
 }: TransactionStatusProps) {
   return (
-    <div className="rounded-2xl border border-neutral-700 bg-launchpad-header pt-4 px-4 text-left mt-4 shadow-xl mb-12">
+    <div className="rounded-2xl border border-neutral-700 bg-launchpad-header pt-4 px-4 text-left mt-4 shadow-xl mb-20">
       <div className="font-inter uppercase font-bold text-neutral-200 text-sm mb-4">
         Transaction status
       </div>
