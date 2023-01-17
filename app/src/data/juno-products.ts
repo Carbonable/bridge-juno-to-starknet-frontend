@@ -26,6 +26,7 @@ export type Product = {
   max: number;
   saleDate: string;
   isReady: boolean;
+  ipfsImage?: string;
 };
 
 export const products: Product[] = [
@@ -61,6 +62,7 @@ export const products: Product[] = [
     max: 5,
     saleDate: "🗓 May, 6th 2022",
     isReady: true,
+    ipfsImage: "QmQZq4AJNMwqPNWs31iu2p2Cema6GVdrNgi8x4QKohirjn/card.png",
   },
   {
     id: "2",
@@ -94,35 +96,6 @@ export const products: Product[] = [
     max: 5,
     saleDate: "🗓 May, 10th 2022",
     isReady: true,
-  },
-  {
-    id: "3",
-    name: "Los Azules",
-    href: "#",
-    imageAlt: "Los Azules",
-    price: "👀",
-    priceUnit: "USD",
-    holder: "CREHO",
-    certifyer: "Wildsense",
-    land: "64.5",
-    country: "Panama",
-    countryIsoCode: "pa",
-    flagUrl:
-      "https://firebasestorage.googleapis.com/v0/b/carbonable-projects/o/flags%2Fpanama.png?alt=media&token=dc9108eb-24ef-48f8-98ba-e8f97da2a962",
-    fundsTarget: "👀",
-    expiration: "2037",
-    duration: "15 years",
-    absorbtion: "14,025 T",
-    odd: ["08", "13", "14", "15"],
-    av: false,
-    slug: "mangroves-los-azules-panama",
-    sellContractAddress: "",
-    nftContractAddress: "",
-    starknetProjectAddress: "",
-    unitPrice: 100000,
-    denom: "ujuno",
-    max: 5,
-    saleDate: "🗓 COMING SOON",
-    isReady: false,
+    ipfsImage: "QmcvEY5ENrUEt7KTZUUBq6aRRsTBMAvCSooNYbe8TQRuoF/card.png",
   },
 ];
