@@ -101,6 +101,7 @@ export async function saveCustomerData(
     return response;
   } catch (err) {
     console.error(err);
+    throw new Error(`${err}`);
   }
 }
 
@@ -155,7 +156,20 @@ export function useMigrateTokens({
     }
 
     try {
-      await saveCustomerData(state.account.address, projectAddress, tokens);
+      const response = await saveCustomerData(
+        state.account.address,
+        projectAddress,
+        tokens
+      );
+      if (400 <= response.code) {
+        toggleMessage(
+          "We encountered an error while sequestrating your tokens.",
+          ApplicationMessageType.Error,
+          "Ooops"
+        );
+        return;
+      }
+
       try {
         const res = await transferMultipleNFT(
           state.client,
